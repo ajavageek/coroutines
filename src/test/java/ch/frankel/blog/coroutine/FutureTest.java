@@ -50,7 +50,7 @@ public class FutureTest {
                 .isNotNull()
                 .isNotEmpty()
                 .hasSameSizeAs(services);
-        Integer maxTimeElapsed = results.stream().map(value -> value.getDuration()).max(Comparator.comparingInt(e -> e)).orElse(0);
+        Integer maxTimeElapsed = results.stream().map(ContentDuration::getDuration).max(Comparator.comparingInt(e -> e)).orElse(0);
         System.out.println("Time taken by the longest service is  " + maxTimeElapsed + " milliseconds");
         Duration duration = Duration.between(start, end);
         long timeElapsed = duration.toMillis();
