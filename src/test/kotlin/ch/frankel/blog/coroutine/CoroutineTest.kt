@@ -26,18 +26,16 @@ val DummyService.asyncContent: Deferred<ContentDuration>
 
     @Test fun should_be_parallel() {
         val start = Instant.now()
-        var results: List<ContentDuration>? = null
-        runBlocking {
-            results = lambdas
-                    .map { it.asyncContent }
-                    .map { it.await() }
+        val results = runBlocking {
+            lambdas.map { it.asyncContent }
+                   .map { it.await() }
         }
         val end = Instant.now()
-        results?.forEach { println(it) }
+        results.forEach { println(it) }
         assertThat(results).isNotNull()
                 .isNotEmpty()
                 .hasSameSizeAs(services)
-        val maxTimeElapsed = results?.maxBy { it -> it.duration }?.duration?.toLong()
+        val maxTimeElapsed = results.maxBy { it -> it.duration }?.duration?.toLong()
         println("Time taken by the longest service is  $maxTimeElapsed milliseconds")
         val duration = Duration.between(start, end)
         val timeElapsed = duration.toMillis()
